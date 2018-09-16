@@ -7,10 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -20,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.dentro.geekbrains.flickr.R;
 import ru.dentro.geekbrains.flickr.presenter.MainPresenter;
+import ru.dentro.geekbrains.flickr.presenter.MainView;
 import ru.dentro.geekbrains.flickr.view.feed.FeedFragment;
 import ru.dentro.geekbrains.flickr.view.profile.ProfileFragment;
 import ru.dentro.geekbrains.flickr.view.search.SearchFragment;

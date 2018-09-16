@@ -1,4 +1,4 @@
-package ru.dentro.geekbrains.flickr.view;
+package ru.dentro.geekbrains.flickr.presenter;
 
 import com.arellomobile.mvp.MvpView;
 
