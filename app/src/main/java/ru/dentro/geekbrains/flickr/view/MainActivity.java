@@ -13,20 +13,24 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.dentro.geekbrains.flickr.R;
+import ru.dentro.geekbrains.flickr.presenter.MainPresenter;
 import ru.dentro.geekbrains.flickr.view.feed.FeedFragment;
 import ru.dentro.geekbrains.flickr.view.profile.ProfileFragment;
 import ru.dentro.geekbrains.flickr.view.search.SearchFragment;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-                    MvpView {
+public class MainActivity extends MvpAppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, MainView {
 
     private static final String TAG = "MainActivity";
+
+    @InjectPresenter
+    MainPresenter mainPresenter;
 
     @BindView(R.id.nav_drawer)
     DrawerLayout navDrawer;
@@ -47,13 +51,13 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-
         navToggle = new ActionBarDrawerToggle(this, navDrawer, toolbar, R.string.open, R.string.close);
         navDrawer.addDrawerListener(navToggle);
         navToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        placeFragment(FeedFragment.class.getName());
+        if (mainPresenter.getContainerState())
+            mainPresenter.onNameReceived(FeedFragment.class.getName());
     }
 
     @Override
@@ -66,18 +70,17 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Log.d(TAG, "item clicked");
         switch (item.getItemId()){
             case R.id.menu_feed: {
-                placeFragment(FeedFragment.class.getName());
+                mainPresenter.onNameReceived(FeedFragment.class.getName());
                 break;
             }
             case R.id.menu_search: {
-                placeFragment(SearchFragment.class.getName());
+                mainPresenter.onNameReceived(SearchFragment.class.getName());
                 break;
             }
             case R.id.menu_profile: {
-                placeFragment(ProfileFragment.class.getName());
+                mainPresenter.onNameReceived(ProfileFragment.class.getName());
                 break;
             }
         }
@@ -85,7 +88,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void placeFragment (String fragmentName){
+    @Override
+    public void placeFragment (String fragmentName){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = Fragment.instantiate(this, fragmentName, null);
 
